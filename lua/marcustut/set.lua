@@ -28,7 +28,7 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "100"
+vim.opt.colorcolumn = "120"
 
 -- Remap copilot acccept to use CTRL + A
 vim.g.copilot_no_tab_map = true
@@ -38,3 +38,6 @@ vim.api.nvim_set_keymap(
     'copilot#Accept("<CR>")',
     { silent = true, expr = true }
 )
+
+-- Neovide settings
+vim.g.neovide_transparency = 0.8
