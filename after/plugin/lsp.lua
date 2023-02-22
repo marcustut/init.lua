@@ -20,6 +20,14 @@ lsp.configure('lua_ls', {
     }
 })
 
+-- Disable typescript's default formatter
+lsp.configure('tsserver', {
+    on_init = function(client, _)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentFormattingRangeProvider = false
+    end
+})
+
 -- Add eslint fix all on save
 lsp.configure('eslint', {
     on_attach = function(client, _)
