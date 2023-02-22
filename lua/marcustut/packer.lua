@@ -43,7 +43,12 @@ return require('packer').startup(function(use)
 
     -- git stuff
     use('tpope/vim-fugitive')
-    use('lewis6991/gitsigns.nvim')
+    use({
+        'lewis6991/gitsigns.nvim',
+        config = function()
+            require('gitsigns').setup()
+        end
+    })
 
     -- lsp
     use({
