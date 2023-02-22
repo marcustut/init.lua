@@ -1,15 +1,22 @@
 local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+    local fn = vim.fn
+    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+    if fn.empty(fn.glob(install_path)) > 0 then
+        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+        vim.cmd [[packadd packer.nvim]]
+        return true
+    end
+    return false
 end
 
 local packer_bootstrap = ensure_packer()
+
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost packer.lua source <afile> | PackerSync
+  augroup end
+]])
 
 return require('packer').startup(function(use)
     -- Packer can manage itself
@@ -21,6 +28,7 @@ return require('packer').startup(function(use)
         requires = { { 'nvim-lua/plenary.nvim' } }
     })
 
+    -- theme
     use({
         'rose-pine/neovim',
         as = 'rose-pine',
@@ -29,12 +37,15 @@ return require('packer').startup(function(use)
         end
     })
 
+    -- syntax highlighting
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use("nvim-treesitter/nvim-treesitter-context")
-    use('theprimeagen/harpoon')
-    use('mbbill/undotree')
-    use('tpope/vim-fugitive')
 
+    -- git stuff
+    use('tpope/vim-fugitive')
+    use('lewis6991/gitsigns.nvim')
+
+    -- lsp
     use({
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
@@ -58,17 +69,38 @@ return require('packer').startup(function(use)
         }
     })
 
-    use("folke/zen-mode.nvim")
+    -- search and replace
+    use({
+        'windwp/nvim-spectre',
+        requires = { "nvim-lua/plenary.nvim" }
+    })
+
+    -- file browser
+    use({
+        "nvim-telescope/telescope-file-browser.nvim",
+        requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    })
+    use('nvim-tree/nvim-web-devicons')
+
+    -- ai
     use("github/copilot.vim")
+
+    -- focus
+    use("folke/zen-mode.nvim")
+    use('theprimeagen/harpoon')
+    use('mbbill/undotree')
+
+    -- text editing
     use("tpope/vim-surround")
-    use {
+    use("tpope/vim-commentary")
+    use({
         "windwp/nvim-autopairs",
         config = function() require("nvim-autopairs").setup {} end
-    }
+    })
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
     if packer_bootstrap then
-      require('packer').sync()
+        require('packer').sync()
     end
 end)

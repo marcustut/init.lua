@@ -20,6 +20,13 @@ lsp.configure('lua_ls', {
     }
 })
 
+-- Add eslint fix all on save
+lsp.configure('eslint', {
+    on_attach = function(client, _)
+        client.server_capabilities.documentFormattingProvider = true
+    end
+})
+
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
