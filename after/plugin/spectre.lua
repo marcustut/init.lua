@@ -1,0 +1,12 @@
+local spectre = require('spectre')
+
+vim.keymap.set('n', '<leader>S', function()
+    spectre.open()
+end)
+vim.keymap.set('n', '<leader>sw', function()
+    spectre.open_visual({ select_word = true })
+end)
+vim.keymap.set('v', '<leader>s', "<esc>:lua require('spectre').open_visual()<CR>")
+vim.keymap.set('n', '<leader>sp', function()
+    spectre.open_file_search()
+end)
