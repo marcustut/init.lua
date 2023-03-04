@@ -32,14 +32,19 @@ return require('packer').startup(function(use)
     use({
         'rose-pine/neovim',
         as = 'rose-pine',
-        config = function()
-            vim.cmd('colorscheme rose-pine')
-        end
+        config = function() vim.cmd('colorscheme rose-pine') end
     })
 
     -- syntax highlighting
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use("nvim-treesitter/nvim-treesitter-context")
+
+    -- status line
+    use({
+        'hoob3rt/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    })
+    use('arkav/lualine-lsp-progress')
 
     -- git stuff
     use('tpope/vim-fugitive')
@@ -78,6 +83,13 @@ return require('packer').startup(function(use)
         requires = "nvim-tree/nvim-web-devicons",
         config = function() require("trouble").setup {} end
     })
+    use({
+        'saecki/crates.nvim',
+        tag = 'v0.3.0',
+        requires = { 'nvim-lua/plenary.nvim' },
+        config = function() require('crates').setup() end,
+    })
+    use('simrat39/rust-tools.nvim')
 
     -- search and replace
     use({
