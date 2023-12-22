@@ -1,4 +1,7 @@
-require("marcustut.remap")
 require("marcustut.set")
-require("marcustut.packer")
-require("marcustut.neovide")
+require("marcustut.number")
+require("marcustut.remap")
+require("marcustut.lazy")
+
+vim.cmd([[colorscheme industry]])
+

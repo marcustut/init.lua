@@ -23,7 +23,9 @@ rt.setup({
             vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
             vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
             vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+            vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 
+            -- Format on save
             vim.api.nvim_create_autocmd("BufWritePre", {
                 buffer = bufnr,
                 callback = function()

@@ -1,7 +1,7 @@
 vim.opt.guicursor = ""
 
-vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.opt.ls = 0
+vim.opt.background = "light"
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -10,7 +10,7 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -42,6 +42,3 @@ vim.api.nvim_set_keymap(
     'copilot#Accept("<CR>")',
     { silent = true, expr = true }
 )
-
--- Neovide settings
-vim.g.neovide_transparency = 0.8
