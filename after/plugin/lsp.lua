@@ -2,15 +2,6 @@ local lsp = require('lsp-zero')
 
 lsp.preset('recommended')
 
--- Configure Mason auto install language servers
-require('mason').setup({})
-require('mason-lspconfig').setup({
-    ensure_installed = { 'lua_ls', 'rust_analyzer', 'tsserver', 'eslint' },
-    handlers = {
-        lsp.default_setup,
-    }
-})
-
 -- Configure auto completion
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -33,7 +24,7 @@ lsp.set_preferences({
     }
 })
 
-lsp.on_attach(function(_, bufnr)
+lsp.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
 
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -52,40 +43,59 @@ lsp.on_attach(function(_, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
         callback = function()
-            vim.lsp.buf.format { async = false }
+            if client.name == 'pyright' then -- Use black to format Python
+                vim.cmd("silent !black %")
+                vim.cmd("edit!")
+            elseif client.name == 'copilot' then -- Copilot does not need format on save
+            else                                 -- Fallback to LSP default formatter
+                vim.lsp.buf.format { async = false }
+            end
         end
     })
 end)
 
--- Configure Lua
-lsp.configure('lua_ls', {
-    settings = {
-        Lua = {
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim' }
-            }
-        }
+-- Configure Mason auto install language servers
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    ensure_installed = { 'lua_ls', 'rust_analyzer', 'tsserver', 'eslint' },
+    handlers = {
+        lsp.default_setup,
+
+        -- Configure Lua
+        lua_ls = function()
+            require('lspconfig').lua_ls.setup({
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            -- Get the language server to recognize the `vim` global
+                            globals = { 'vim' }
+                        }
+                    }
+                }
+            })
+        end,
+
+        -- Disable typescript's default formatter
+        tsserver = function()
+            require('lspconfig').tsserver.setup({
+                on_init = function(client, _)
+                    client.server_capabilities.documentFormattingProvider = false
+                    client.server_capabilities.documentFormattingRangeProvider = false
+                end
+            })
+        end,
+
+        -- Add eslint fix all on save
+        eslint = function()
+            require('lspconfig').eslint.setup({
+                on_attach = function(client, _)
+                    client.server_capabilities.documentFormattingProvider = true
+                end
+            })
+        end,
     }
-})
-
--- Disable typescript's default formatter
-lsp.configure('tsserver', {
-    on_init = function(client, _)
-        client.server_capabilities.documentFormattingProvider = false
-        client.server_capabilities.documentFormattingRangeProvider = false
-    end
-})
-
--- Add eslint fix all on save
-lsp.configure('eslint', {
-    on_attach = function(client, _)
-        client.server_capabilities.documentFormattingProvider = true
-    end
 })
 
 lsp.setup()
 
-vim.diagnostic.config({
-    virtual_text = true
-})
+vim.diagnostic.config({ virtual_text = true })

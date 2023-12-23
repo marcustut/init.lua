@@ -48,6 +48,35 @@ require("lazy").setup({
         build = ':TSUpdate',
         event = { 'VeryLazy' },
         cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
+        config = function()
+            require('nvim-treesitter.configs').setup({
+                highlight = { enable = true },
+                indent = { enable = true },
+                ensure_installed = {
+                    "bash",
+                    "c",
+                    "rust",
+                    "diff",
+                    "html",
+                    "javascript",
+                    "jsdoc",
+                    "json",
+                    "jsonc",
+                    "lua",
+                    "luadoc",
+                    "luap",
+                    "markdown",
+                    "markdown_inline",
+                    "python",
+                    "query",
+                    "regex",
+                    "toml",
+                    "tsx",
+                    "typescript",
+                    "yaml",
+                },
+            })
+        end
     },
 
     -- Language Server Protocol (LSP)
