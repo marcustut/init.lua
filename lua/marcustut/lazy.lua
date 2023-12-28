@@ -28,6 +28,17 @@ require("lazy").setup({
         event = "InsertEnter"
     },
 
+    -- Colorschemes
+    {
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
+    },
+    {
+        "rebelot/kanagawa.nvim",
+        priority = 1000,
+    },
+
     -- Icons
     {
         "nvim-tree/nvim-web-devicons",

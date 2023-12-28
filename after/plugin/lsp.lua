@@ -40,17 +40,21 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 
     -- Format on save
+    local group = vim.api.nvim_create_augroup("Format on save", { clear = true })
     vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
+        group = group,
         callback = function()
             if client.name == 'pyright' then -- Use black to format Python
+                vim.cmd("write")
                 vim.cmd("silent !black %")
                 vim.cmd("edit!")
+                print("formatted")
             elseif client.name == 'copilot' then -- Copilot does not need format on save
             else                                 -- Fallback to LSP default formatter
                 vim.lsp.buf.format { async = false }
             end
-        end
+        end,
     })
 end)
 
