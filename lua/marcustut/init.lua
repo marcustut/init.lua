@@ -4,5 +4,5 @@ require("marcustut.number")
 require("marcustut.remap")
 require("marcustut.lazy")
 
-vim.cmd([[colorscheme kanagawa-dragon]])
+vim.cmd([[colorscheme catppuccin-mocha]])
 

@@ -28,6 +28,13 @@ require("lazy").setup({
         event = "InsertEnter"
     },
 
+    -- Terminal
+    {
+        'akinsho/toggleterm.nvim',
+        version = "*",
+        config = true
+    },
+
     -- Colorschemes
     {
         "catppuccin/nvim",
@@ -63,6 +70,7 @@ require("lazy").setup({
             require('nvim-treesitter.configs').setup({
                 highlight = { enable = true },
                 indent = { enable = true },
+                autotag = { enable = true },
                 ensure_installed = {
                     "bash",
                     "c",
@@ -138,6 +146,15 @@ require("lazy").setup({
         'nkrkv/nvim-treesitter-rescript',
         ft = 'rescript',
     },
+
+    -- Markdown
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function() vim.fn["mkdp#util#install"]() end,
+    },
+
 
     -- Utilities
     "tpope/vim-surround",
