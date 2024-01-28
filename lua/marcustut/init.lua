@@ -4,5 +4,6 @@ require("marcustut.number")
 require("marcustut.remap")
 require("marcustut.lazy")
 
-vim.cmd([[colorscheme catppuccin-mocha]])
+vim.o.background = "dark"
+vim.cmd([[colorscheme gruvbox]])
 
