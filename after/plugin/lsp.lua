@@ -61,9 +61,19 @@ end)
 -- Configure Mason auto install language servers
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = { 'lua_ls', 'rust_analyzer', 'tsserver', 'eslint' },
+    ensure_installed = { 'lua_ls', 'tsserver', 'eslint' },
     handlers = {
-        lsp.default_setup,
+        function(server_name)
+            if server_name == "rust_analyzer" then
+                return
+            end
+
+            lsp.default_setup(server_name)
+        end,
+
+        clangd = function()
+            require('lspconfig').clangd.setup({})
+        end,
 
         -- Configure Lua
         lua_ls = function()

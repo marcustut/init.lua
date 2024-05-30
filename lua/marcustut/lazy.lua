@@ -38,10 +38,10 @@ require("lazy").setup({
     -- SSH
     {
         "amitds1997/remote-nvim.nvim",
-        version = "*",                  -- Pin to GitHub releases
+        version = "*",                       -- Pin to GitHub releases
         dependencies = {
-            "nvim-lua/plenary.nvim",    -- For standard functions
-            "MunifTanjim/nui.nvim",     -- To build the plugin UI
+            "nvim-lua/plenary.nvim",         -- For standard functions
+            "MunifTanjim/nui.nvim",          -- To build the plugin UI
             "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
         },
         config = true,
@@ -61,6 +61,9 @@ require("lazy").setup({
         "ellisonleao/gruvbox.nvim",
         priority = 1000,
         config = true,
+    },
+    {
+        "xiyaowong/transparent.nvim",
     },
 
     -- Icons
@@ -110,6 +113,7 @@ require("lazy").setup({
                     "tsx",
                     "typescript",
                     "yaml",
+                    "vimdoc",
                 },
             })
         end
@@ -138,8 +142,10 @@ require("lazy").setup({
 
     -- Rust
     {
-        "simrat39/rust-tools.nvim",
+        'mrcjkb/rustaceanvim',
         ft = "rust",
+        version = '^4',
+        lazy = false
     },
     {
         "saecki/crates.nvim",
