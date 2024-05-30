@@ -39,6 +39,14 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 
+    -- Toggle inlay hints
+    if client.server_capabilities.inlayHintProvider then
+        vim.keymap.set("n", "<leader>h", function()
+            local current_setting = vim.lsp.inlay_hint.is_enabled(bufnr)
+            vim.lsp.inlay_hint.enable(bufnr, not current_setting)
+        end)
+    end
+
     -- Format on save
     local group = vim.api.nvim_create_augroup("Format on save", { clear = true })
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -63,14 +71,12 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = { 'lua_ls', 'tsserver', 'eslint' },
     handlers = {
-        function(server_name)
-            if server_name == "rust_analyzer" then
-                return
-            end
+        lsp.default_setup,
 
-            lsp.default_setup(server_name)
-        end,
+        -- Disable lspconfig for rust since we use rustaceanvim
+        rust_analyzer = function() end,
 
+        -- Configure clangd (for C/C++)
         clangd = function()
             require('lspconfig').clangd.setup({})
         end,
