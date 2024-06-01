@@ -15,12 +15,16 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     -- Telescope
     {
-        "nvim-telescope/telescope.nvim",
-        tag = '0.1.5',
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.8',
         dependencies = {
-            "nvim-lua/plenary.nvim"
+            'nvim-lua/plenary.nvim',
+            { 'nvim-telescope/telescope-live-grep-args.nvim', version = "^1.0.0" }
         },
     },
+
+    -- File manager
+    { 'nvim-tree/nvim-tree.lua' },
 
     -- Status line
     {
@@ -62,9 +66,7 @@ require("lazy").setup({
                 sections = {
                     lualine_a = { 'mode' },
                     lualine_b = { 'branch', 'diff', 'diagnostics' },
-                    lualine_c = { { 'filename', path = 1, }, function()
-                        return require('lsp-progress').progress()
-                    end },
+                    lualine_c = { { 'filename', path = 1, }, function() return require('lsp-progress').progress() end },
                     lualine_x = { 'encoding', 'fileformat', 'filetype' },
                     lualine_y = { 'progress' },
                     lualine_z = { 'location' }
@@ -88,6 +90,7 @@ require("lazy").setup({
     -- Copilot
     {
         "github/copilot.vim",
+        tags = "v1.34.0",
         event = "InsertEnter"
     },
 
@@ -125,7 +128,10 @@ require("lazy").setup({
         priority = 1000,
         config = true,
     },
-    { "xiyaowong/transparent.nvim",       priority = 1000 },
+    {
+        "xiyaowong/transparent.nvim",
+        priority = 1000,
+    },
 
     -- Icons
     {
@@ -197,9 +203,7 @@ require("lazy").setup({
         'MysticalDevil/inlay-hints.nvim',
         event = "LspAttach",
         dependencies = { "neovim/nvim-lspconfig" },
-        config = function()
-            require("inlay-hints").setup()
-        end
+        config = function() require("inlay-hints").setup() end,
     },
 
     -- Autocompletion
@@ -251,7 +255,6 @@ require("lazy").setup({
         ft = { "markdown" },
         build = function() vim.fn["mkdp#util#install"]() end,
     },
-
 
     -- Utilities
     "tpope/vim-surround",
