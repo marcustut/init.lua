@@ -73,6 +73,17 @@ require('mason-lspconfig').setup({
     handlers = {
         lsp.default_setup,
 
+        -- Configure nix
+        nil_ls = function()
+            require('lspconfig').nil_ls.setup({
+                settings = {
+                    ['nil'] = {
+                        formatting = { command = { "nixpkgs-fmt" } }
+                    }
+                }
+            })
+        end,
+
         -- Disable lspconfig for rust since we use rustaceanvim
         rust_analyzer = function() end,
 
