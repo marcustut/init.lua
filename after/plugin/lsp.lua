@@ -92,6 +92,11 @@ require('mason-lspconfig').setup({
             require('lspconfig').clangd.setup({})
         end,
 
+        -- Configure Python
+        pyright = function()
+            require('lspconfig').pyright.setup({})
+        end,
+
         -- Configure Lua
         lua_ls = function()
             require('lspconfig').lua_ls.setup({
