@@ -19,12 +19,16 @@ require("lazy").setup({
         tag = '0.1.8',
         dependencies = {
             'nvim-lua/plenary.nvim',
+            'jonarrien/telescope-cmdline.nvim',
             { 'nvim-telescope/telescope-live-grep-args.nvim', version = "^1.0.0" }
         },
     },
 
     -- File manager
     { 'nvim-tree/nvim-tree.lua' },
+
+    -- UI
+    { 'VonHeikemen/searchbox.nvim', dependencies = { 'MunifTanjim/nui.nvim' } },
 
     -- Status line
     {
@@ -90,7 +94,7 @@ require("lazy").setup({
     -- Copilot
     {
         "github/copilot.vim",
-        tags = "v1.34.0",
+        tags = "v1.41.0",
         event = "InsertEnter"
     },
 
