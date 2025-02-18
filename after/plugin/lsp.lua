@@ -111,16 +111,6 @@ require('mason-lspconfig').setup({
             })
         end,
 
-        -- Disable typescript's default formatter
-        tsserver = function()
-            require('lspconfig').tsserver.setup({
-                on_init = function(client, _)
-                    client.server_capabilities.documentFormattingProvider = false
-                    client.server_capabilities.documentFormattingRangeProvider = false
-                end
-            })
-        end,
-
         -- Add eslint fix all on save
         eslint = function()
             require('lspconfig').eslint.setup({
