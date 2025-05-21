@@ -198,6 +198,7 @@ require("lazy").setup({
     { 'neovim/nvim-lspconfig' },
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
+    { 'stevearc/conform.nvim' },
 
     -- Debugging
     { 'mfussenegger/nvim-dap' },

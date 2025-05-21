@@ -34,7 +34,7 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "<leader>lj", vim.diagnostic.goto_next, opts)
     vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev, opts)
     vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
-    vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
+    vim.keymap.set("n", "<leader>lf", require("conform").format)
     vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
     vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
@@ -52,7 +52,7 @@ lsp.on_attach(function(client, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
         group = group,
-        callback = function()
+        callback = function(args)
             if client.name == 'pyright' then -- Use black to format Python
                 vim.cmd("write")
                 vim.cmd("silent !black %")
@@ -60,7 +60,8 @@ lsp.on_attach(function(client, bufnr)
                 print("formatted")
             elseif client.name == 'copilot' then -- Copilot does not need format on save
             else                                 -- Fallback to LSP default formatter
-                vim.lsp.buf.format { async = false }
+                require("conform").format({ bufnr = args.buf })
+                -- vim.lsp.buf.format { async = false }
             end
         end,
     })
