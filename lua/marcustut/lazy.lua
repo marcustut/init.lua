@@ -326,7 +326,6 @@ require("lazy").setup({
 				["<C-k>"] = { "select_prev", "snippet_backward", "fallback" },
 				["<C-j>"] = { "select_next", "snippet_forward", "fallback" },
 				["<CR>"] = { "accept", "fallback" },
-				["<Esc>"] = { "hide", "fallback" },
 			},
 
 			appearance = {
