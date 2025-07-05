@@ -1,34 +1,39 @@
 vim.g.rustaceanvim = {
 	server = {
 		on_attach = function(client, bufnr)
-			-- Hover actions
-			vim.keymap.set("n", "K", function()
-				vim.cmd.RustLsp({ "hover", "actions" })
-			end)
+			local opts = { buffer = bufnr, remap = false }
 
-			-- Code action groups
-			vim.keymap.set("n", "<leader>la", function()
-				vim.cmd.RustLsp("codeAction")
-			end)
+			-- Flycheck
+			vim.keymap.set("n", "<leader>lc", function()
+				vim.cmd.RustLsp("flyCheck")
+			end, opts)
 
 			-- Expand macro
 			vim.keymap.set("n", "<leader>le", function()
 				vim.cmd.RustLsp("expandMacro")
-			end)
+			end, opts)
 
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+			vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
+			vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
+			vim.keymap.set("n", "K", function()
+				vim.cmd.RustLsp({ "hover", "actions" })
+			end, opts)
 			vim.keymap.set("n", "<leader>lws", function()
 				vim.cmd.RustLsp("workspaceSymbol")
-			end)
-			vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
+			end, opts)
+			vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, opts)
 			vim.keymap.set("n", "<leader>lj", function()
-				vim.cmd.RustLsp("explainError")
-			end)
-			vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev)
-			vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
-			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
-			vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help)
-			vim.keymap.set("n", "gr", vim.lsp.buf.references)
+				vim.cmd.RustLsp({ "explainError", "cycle" })
+			end, opts)
+			vim.keymap.set("n", "<leader>lk", function()
+				vim.cmd.RustLsp({ "explainError", "cycle_prev" })
+			end, opts)
+			vim.keymap.set("n", "<leader>la", function()
+				vim.cmd.RustLsp("codeAction")
+			end, opts)
+			vim.keymap.set("n", "<leader>lf", require("conform").format, opts)
+			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
+			vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 
 			-- Toggle inlay hints
 			-- if client.server_capabilities.inlayHintProvider then

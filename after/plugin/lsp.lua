@@ -83,8 +83,8 @@ local servers = {
 		})
 	end,
 
-	-- Disable lspconfig for rust since we use rustaceanvim
-	rust_analyzer = function() end,
+	-- -- Disable lspconfig for rust since we use rustaceanvim
+	-- rust_analyzer = function() end,
 
 	-- Configure clangd (for C/C++)
 	clangd = function()

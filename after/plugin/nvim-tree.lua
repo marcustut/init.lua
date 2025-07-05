@@ -8,9 +8,9 @@ vim.opt.termguicolors = true
 -- start nvim tree
 require("nvim-tree").setup({})
 
-vim.keymap.set("n", "<C-b>", function()
+vim.keymap.set("n", "<leader>op", function()
 	vim.cmd([[NvimTreeToggle]])
-end, {})
+end, { desc = "[O]pen [P]roject Explorer" })
 
 -- OR setup with some options
 -- require("nvim-tree").setup({
