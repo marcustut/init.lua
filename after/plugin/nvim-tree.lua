@@ -8,7 +8,9 @@ vim.opt.termguicolors = true
 -- start nvim tree
 require("nvim-tree").setup({})
 
-vim.keymap.set('n', '<C-b>', function() vim.cmd([[NvimTreeToggle]]) end, {})
+vim.keymap.set("n", "<C-b>", function()
+	vim.cmd([[NvimTreeToggle]])
+end, {})
 
 -- OR setup with some options
 -- require("nvim-tree").setup({
