@@ -1,4 +1,5 @@
-vim.g.neovide_transparency = 0.8
+vim.g.neovide_opacity = 1.0
+vim.g.transparency = 0.8
 
 vim.g.neovide_scale_factor = 1.0
 local change_scale_factor = function(delta)
