@@ -21,7 +21,7 @@ require("lazy").setup({
 			"nvim-lua/plenary.nvim",
 			"jonarrien/telescope-cmdline.nvim",
 			{ "nvim-telescope/telescope-live-grep-args.nvim", version = "^1.0.0" },
-			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
+			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 
 				-- `build` is used to run some command when the plugin is installed/updated.
@@ -34,6 +34,7 @@ require("lazy").setup({
 					return vim.fn.executable("make") == 1
 				end,
 			},
+			{ "LukasPietzschmann/telescope-tabs" },
 			{ "nvim-telescope/telescope-ui-select.nvim" },
 			{ "nvim-tree/nvim-web-devicons" }, -- Useful for getting pretty icons, but requires a Nerd Font.
 		},
@@ -44,6 +45,20 @@ require("lazy").setup({
 
 	-- UI
 	{ "VonHeikemen/searchbox.nvim", dependencies = { "MunifTanjim/nui.nvim" } },
+
+	-- Tabs
+	{
+		"romgrk/barbar.nvim",
+		dependencies = {
+			"lewis6991/gitsigns.nvim",
+			"nvim-tree/nvim-web-devicons",
+		},
+		init = function()
+			vim.g.barbar_auto_setup = false
+		end,
+		opts = {},
+		version = "^1.0.0",
+	},
 
 	-- Status line
 	{
@@ -113,9 +128,13 @@ require("lazy").setup({
 
 	-- Copilot
 	{
-		"github/copilot.vim",
-		tags = "v1.41.0",
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
 		event = "InsertEnter",
+		opts = {
+			suggestion = { enabled = false },
+			panel = { enabled = false },
+		},
 	},
 
 	-- Terminal
@@ -315,6 +334,7 @@ require("lazy").setup({
 				},
 				opts = {},
 			},
+			{ "fang2hou/blink-copilot" },
 			"folke/lazydev.nvim",
 		},
 		--- @module 'blink.cmp'
@@ -352,9 +372,10 @@ require("lazy").setup({
 			},
 
 			sources = {
-				default = { "lsp", "path", "snippets", "lazydev" },
+				default = { "lsp", "path", "snippets", "lazydev", "copilot" },
 				providers = {
 					lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
+					copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
 				},
 			},
 

@@ -1,4 +1,5 @@
 local telescope = require("telescope")
+local telescope_tabs = require("telescope-tabs")
 
 telescope.setup({
 	["ui-select"] = {
@@ -8,10 +9,29 @@ telescope.setup({
 telescope.load_extension("live_grep_args")
 telescope.load_extension("fzf")
 telescope.load_extension("ui-select")
+telescope.load_extension("telescope-tabs")
+
+telescope.setup({
+	["ui-select"] = { require("telescope.themes").get_dropdown() },
+	defaults = {
+		mappings = {
+			i = {
+				["<C-j>"] = "move_selection_next",
+				["<C-k>"] = "move_selection_previous",
+			},
+		},
+	},
+})
+telescope.load_extension("live_grep_args")
+telescope.load_extension("fzf")
+telescope.load_extension("ui-select")
+telescope.load_extension("telescope-tabs")
+telescope_tabs.setup()
 
 local builtin = require("telescope.builtin")
 
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind [B]uffers" })
+vim.keymap.set("n", "<leader>ft", telescope_tabs.list_tabs, { desc = "[F]ind [T]abs" })
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
 vim.keymap.set("n", "<leader>fp", builtin.git_files, { desc = "[F]ind git files" })
 vim.keymap.set("n", "<leader>fw", builtin.live_grep, { desc = "[F]ind [W]ords (live grep)" })
