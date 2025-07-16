@@ -1,16 +1,16 @@
 -- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 -- optionally enable 24-bit colour
-vim.opt.termguicolors = true
+-- vim.opt.termguicolors = true
 
 -- start nvim tree
-require("nvim-tree").setup({})
+-- require("nvim-tree").setup({})
 
-vim.keymap.set("n", "<leader>op", function()
-	vim.cmd([[NvimTreeToggle]])
-end, { desc = "[O]pen [P]roject Explorer" })
+-- vim.keymap.set("n", "<leader>op", function()
+-- 	vim.cmd([[NvimTreeToggle]])
+-- end, { desc = "[O]pen [P]roject Explorer" })
 
 -- OR setup with some options
 -- require("nvim-tree").setup({

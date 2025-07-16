@@ -34,14 +34,19 @@ require("lazy").setup({
 					return vim.fn.executable("make") == 1
 				end,
 			},
-			{ "LukasPietzschmann/telescope-tabs" },
+			{ "LukasPietzschmann/telescope-tabs" }, -- Tab buffers
+			{ "nvim-telescope/telescope-project.nvim" }, -- Project management
 			{ "nvim-telescope/telescope-ui-select.nvim" },
 			{ "nvim-tree/nvim-web-devicons" }, -- Useful for getting pretty icons, but requires a Nerd Font.
 		},
 	},
 
 	-- File manager
-	{ "nvim-tree/nvim-tree.lua" },
+	-- { "nvim-tree/nvim-tree.lua" },
+	{
+		"nvim-telescope/telescope-file-browser.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+	},
 
 	-- UI
 	{ "VonHeikemen/searchbox.nvim", dependencies = { "MunifTanjim/nui.nvim" } },
