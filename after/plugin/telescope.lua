@@ -31,7 +31,12 @@ local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind [B]uffers" })
 vim.keymap.set("n", "<leader>ft", telescope_tabs.list_tabs, { desc = "[F]ind [T]abs" })
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-vim.keymap.set("n", "<leader>op", telescope.extensions.file_browser.file_browser, { desc = "[O]pen [P]roject Browser" })
+vim.keymap.set(
+	"n",
+	"<leader>op",
+	":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+	{ desc = "[O]pen [P]roject Browser" }
+)
 vim.keymap.set("n", "<leader>fp", telescope.extensions.project.project, { desc = "[F]ind [P]rojects" })
 vim.keymap.set("n", "<leader>fw", builtin.live_grep, { desc = "[F]ind [W]ords (live grep)" })
 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })

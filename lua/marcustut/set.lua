@@ -1,7 +1,6 @@
-vim.opt.guicursor = ""
+vim.opt.guicursor = "" -- make the cursor always a block
 
 vim.opt.ls = 0
-vim.opt.background = "light"
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -33,7 +32,3 @@ vim.opt.colorcolumn = "120"
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevel = 99
-
--- Remap copilot acccept to use CTRL + A
-vim.g.copilot_no_tab_map = true
-vim.api.nvim_set_keymap("i", "<C-a>", 'copilot#Accept("<CR>")', { silent = true, expr = true })

@@ -5,4 +5,4 @@ require("marcustut.remap")
 require("marcustut.lazy")
 
 vim.o.background = "dark"
-vim.cmd([[colorscheme kanagawa-wave]])
+vim.cmd([[colorscheme oxocarbon]])
