@@ -1,135 +1,111 @@
-local lsp = require("lsp-zero")
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+    callback = function(args)
+        -- Helper function to map keybinds
+        local map = function(keys, func, desc, mode)
+            mode = mode or 'n'
+            vim.keymap.set(mode, keys, func, { buffer = args.buf, desc = 'LSP: ' .. desc })
+        end
 
-lsp.preset("recommended")
+        -- Common keybinds
+        map("gd", require("telescope.builtin").lsp_definitions, '[G]oto [D]efinition')
+        map("gr", require("telescope.builtin").lsp_references, '[G]oto [R]eferences')
+        map("K", vim.lsp.buf.hover, 'Hover')
+        map("<leader>ls", require("telescope.builtin").lsp_document_symbols, 'List [S]ymbols')
+        map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, 'List [W]orkspace [S]ymbols')
+        map("<leader>ld", vim.diagnostic.open_float, 'List [D]iagnostics')
+        map("<leader>lj", function() vim.diagnostic.jump({ count = 1, float = true }) end, 'Next Diagnostic')
+        map("<leader>lk", function() vim.diagnostic.jump({ count = -1, float = true }) end, 'Previous Diagnostic')
+        map("<leader>la", vim.lsp.buf.code_action, 'Code [A]ction')
+        map("<leader>lr", vim.lsp.buf.rename, '[R]ename')
+        map("<C-h>", vim.lsp.buf.signature_help, 'Signature [H]elp', 'i')
 
-lsp.on_attach(function(client, bufnr)
-    local opts = { buffer = bufnr, remap = false }
+        -- The following two autocommands are used to highlight references of the
+        -- word under your cursor when your cursor rests there for a little while.
+        --    See `:help CursorHold` for information about when this is executed
+        --
+        -- When you move your cursor, the highlights will be cleared (the second autocommand).
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, args.buf) then
+            local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+                buffer = args.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.document_highlight,
+            })
 
-    vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
-    vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "<leader>ls", require("telescope.builtin").lsp_document_symbols, opts)
-    vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts)
-    vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, opts)
-    vim.keymap.set("n", "<leader>lj", vim.diagnostic.goto_next, opts)
-    vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
-    vim.keymap.set("n", "<leader>lf", function()
-        require("conform").format({ async = true, bufnr = bufnr })
-    end)
-    vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
-    vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+                buffer = args.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.clear_references,
+            })
 
-    -- Toggle inlay hints
-    if client.server_capabilities.inlayHintProvider then
-        vim.keymap.set("n", "<leader>h", function()
-            local current_setting = vim.lsp.inlay_hint.is_enabled()
-            vim.lsp.inlay_hint.enable(not current_setting)
-        end)
+            vim.api.nvim_create_autocmd('LspDetach', {
+                group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
+                callback = function(event)
+                    vim.lsp.buf.clear_references()
+                    vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = event.buf }
+                end,
+            })
+        end
+
+        -- Creates a keymap to toggle inlay hints if the language server supports them
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, args.buf) then
+            map('<leader>lh', function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = args.buf })
+            end, 'Toggle Inlay [H]ints')
+        end
     end
+})
 
-    -- Diagnostic Config
-    -- See :help vim.diagnostic.Opts
-    vim.diagnostic.config({
-        severity_sort = true,
-        float = { border = "rounded", source = "if_many" },
-        underline = { severity = vim.diagnostic.severity.WARN },
-        signs = {
-            text = {
-                [vim.diagnostic.severity.ERROR] = "󰅚 ",
-                [vim.diagnostic.severity.WARN] = "󰀪 ",
-                [vim.diagnostic.severity.INFO] = "󰋽 ",
-                [vim.diagnostic.severity.HINT] = "󰌶 ",
-            },
+
+-- Diagnostic Config
+-- See :help vim.diagnostic.Opts
+vim.diagnostic.config({
+    severity_sort = true,
+    float = { border = "rounded", source = "if_many" },
+    underline = true,
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = "󰅚 ",
+            [vim.diagnostic.severity.WARN] = "󰀪 ",
+            [vim.diagnostic.severity.INFO] = "󰋽 ",
+            [vim.diagnostic.severity.HINT] = "󰌶 ",
         },
-        virtual_text = {
-            source = "if_many",
-            spacing = 2,
-            format = function(diagnostic)
-                local diagnostic_message = {
-                    [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                    [vim.diagnostic.severity.WARN] = diagnostic.message,
-                    [vim.diagnostic.severity.INFO] = diagnostic.message,
-                    [vim.diagnostic.severity.HINT] = diagnostic.message,
-                }
-                return diagnostic_message[diagnostic.severity]
-            end,
-        },
-    })
-
-    -- Format on save
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        group = vim.api.nvim_create_augroup("Format on save", { clear = true }),
-        callback = function()
-            require("conform").format({ async = true })
-        end,
-    })
-end)
-
--- Configure Mason auto install language servers
-require("mason").setup({})
-local servers = {
-    -- Configure nix
-    nil_ls = function()
-        require("lspconfig").nil_ls.setup({
-            settings = {
-                ["nil"] = {
-                    formatting = { command = { "nixpkgs-fmt" } },
-                },
-            },
-        })
-    end,
-
-    -- -- Disable lspconfig for rust since we use rustaceanvim
-    -- rust_analyzer = function() end,
-
-    -- Configure clangd (for C/C++)
-    clangd = function()
-        require("lspconfig").clangd.setup({})
-    end,
-
-    -- Configure Python
-    pyright = function()
-        require("lspconfig").pyright.setup({})
-    end,
-
-    -- Configure Lua
-    lua_ls = function()
-        require("lspconfig").lua_ls.setup({
-            settings = {
-                Lua = {
-                    diagnostics = {
-                        -- Get the language server to recognize the `vim` global
-                        globals = { "vim" },
-                    },
-                },
-            },
-        })
-    end,
-
-    -- Add eslint fix all on save
-    eslint = function()
-        require("lspconfig").eslint.setup({
-            on_attach = function(client, _)
-                client.server_capabilities.documentFormattingProvider = true
-            end,
-        })
-    end,
-}
-require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls" },
-    handlers = {
-        function(server_name)
-            local capabilities = require("blink.cmp").get_lsp_capabilities()
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
+    },
+    virtual_text = {
+        source = "if_many",
+        spacing = 2,
+        format = function(diagnostic)
+            local diagnostic_message = {
+                [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                [vim.diagnostic.severity.WARN] = diagnostic.message,
+                [vim.diagnostic.severity.INFO] = diagnostic.message,
+                [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
         end,
     },
 })
 
-lsp.setup()
+-- LSP servers and clients are able to communicate to each other what features they support.
+--  By default, Neovim doesn't support everything that is in the LSP specification.
+--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
+--  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
+local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+-- Nix files
+vim.lsp.config("nil_ls", {
+    capabilities = capabilities,
+    settings = {
+        ["nil"] = { formatting = { command = { "nixpkgs-fmt" } } },
+    },
+})
+
+require("mason").setup({})
+require("mason-lspconfig").setup({
+    ensure_installed = { "lua_ls" },
+    automatic_enable = {
+        exclude = { "rust_analyzer" }
+    },
+})

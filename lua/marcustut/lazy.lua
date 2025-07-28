@@ -254,10 +254,6 @@ require("lazy").setup({
 
     -- Language Server Protocol (LSP)
     {
-        "VonHeikemen/lsp-zero.nvim",
-        branch = "v3.x",
-    },
-    {
         -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
         -- used for completion, annotations and signatures of Neovim apis
         "folke/lazydev.nvim",
