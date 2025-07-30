@@ -11,19 +11,12 @@ telescope.setup({
 			},
 		},
 	},
-	extensions = {
-		file_browser = {
-			theme = "ivy",
-			hijack_netrw = true,
-		},
-	},
 })
 telescope.load_extension("live_grep_args")
 telescope.load_extension("fzf")
 telescope.load_extension("ui-select")
 telescope.load_extension("telescope-tabs")
 telescope.load_extension("project")
-telescope.load_extension("file_browser")
 telescope_tabs.setup()
 
 local builtin = require("telescope.builtin")
@@ -31,12 +24,6 @@ local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind [B]uffers" })
 vim.keymap.set("n", "<leader>ft", telescope_tabs.list_tabs, { desc = "[F]ind [T]abs" })
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-vim.keymap.set(
-	"n",
-	"<leader>op",
-	":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-	{ desc = "[O]pen [P]roject Browser" }
-)
 vim.keymap.set("n", "<leader>fp", telescope.extensions.project.project, { desc = "[F]ind [P]rojects" })
 vim.keymap.set("n", "<leader>fw", builtin.live_grep, { desc = "[F]ind [W]ords (live grep)" })
 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
