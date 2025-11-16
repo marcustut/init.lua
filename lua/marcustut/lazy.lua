@@ -67,6 +67,9 @@ require("lazy").setup({
         dependencies = { "MunifTanjim/nui.nvim" },
     },
 
+    -- Quickfix
+    { "stefandtw/quickfix-reflector.vim" },
+
     -- Tabs
     -- {
     -- 	"romgrk/barbar.nvim",
@@ -85,13 +88,13 @@ require("lazy").setup({
     {
         "linrongbin16/lsp-progress.nvim",
         config = function()
-            require("lsp-progress").setup()
+            require("lsp-progress").setup({})
             -- listen lsp-progress event and refresh lualine
             vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
             vim.api.nvim_create_autocmd("User", {
                 group = "lualine_augroup",
                 pattern = "LspProgressStatusUpdated",
-                callback = require("lualine").refresh,
+                callback = function() require("lualine").refresh() end,
             })
         end,
     },
@@ -153,8 +156,8 @@ require("lazy").setup({
         cmd = "Copilot",
         event = "InsertEnter",
         opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
+            suggestion = { enabled = true },
+            panel = { enabled = true },
         },
     },
 
@@ -339,7 +342,7 @@ require("lazy").setup({
                 },
                 opts = {},
             },
-            { "fang2hou/blink-copilot" },
+            -- { "fang2hou/blink-copilot" },
             "folke/lazydev.nvim",
         },
         --- @module 'blink.cmp'
@@ -377,10 +380,11 @@ require("lazy").setup({
             },
 
             sources = {
-                default = { "lsp", "path", "snippets", "lazydev", "copilot" },
+                -- default = { "lsp", "path", "snippets", "lazydev", "copilot" },
+                default = { "lsp", "path", "snippets", "lazydev" },
                 providers = {
                     lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
-                    copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
+                    -- copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
                 },
             },
 
@@ -416,7 +420,7 @@ require("lazy").setup({
         event = { "BufRead Cargo.toml" },
         tag = "stable",
         config = function()
-            require("crates").setup()
+            require("crates").setup({})
         end,
     },
 
@@ -449,9 +453,9 @@ require("lazy").setup({
     },
 
     -- Help
-    {                       -- Useful plugin to show you pending keybinds.
-        "folke/which-key.nvim",
-        event = "VimEnter", -- Sets the loading event to 'VimEnter'
+    {
+        "folke/which-key.nvim", -- Useful plugin to show you pending keybinds.
+        event = "VimEnter",     -- Sets the loading event to 'VimEnter'
         opts = {
             -- delay between pressing a key and opening which-key (milliseconds)
             -- this setting is independent of vim.o.timeoutlen
