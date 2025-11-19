@@ -1,9 +1,12 @@
 -- Font
-vim.o.guifont = "FiraCode Nerd Font:h14"
+vim.o.guifont = "IosevkaTerm Nerd Font:h14"
 
 -- Transparency
-vim.g.neovide_opacity = 1.0
+vim.g.neovide_opacity = 0.8
 vim.g.transparency = 0.8
+
+-- Animation
+vim.g.neovide_cursor_animation_length = 0.04
 
 -- Scale
 vim.g.neovide_scale_factor = 1.0

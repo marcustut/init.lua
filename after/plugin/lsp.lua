@@ -8,12 +8,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         -- Common keybinds
-        map("gd", require("telescope.builtin").lsp_definitions, '[G]oto [D]efinition')
-        map("gr", require("telescope.builtin").lsp_references, '[G]oto [R]eferences')
         map("K", vim.lsp.buf.hover, 'Hover')
-        map("<leader>ls", require("telescope.builtin").lsp_document_symbols, 'List [S]ymbols')
-        map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, 'List [W]orkspace [S]ymbols')
-        map("<leader>ld", vim.diagnostic.open_float, 'List [D]iagnostics')
         map("<leader>lj", function() vim.diagnostic.jump({ count = 1, float = true }) end, 'Next Diagnostic')
         map("<leader>lk", function() vim.diagnostic.jump({ count = -1, float = true }) end, 'Previous Diagnostic')
         map("<leader>la", vim.lsp.buf.code_action, 'Code [A]ction')

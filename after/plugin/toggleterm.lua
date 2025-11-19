@@ -1,6 +1,6 @@
-vim.keymap.set("n", "<leader>ot", function()
-    vim.cmd([[ToggleTerm direction=horizontal size=20]])
-end, { desc = "[O]pen [T]erminal" })
+-- vim.keymap.set("n", "<leader>ot", function()
+--     vim.cmd([[ToggleTerm direction=horizontal size=20]])
+-- end, { desc = "[O]pen [T]erminal" })
 
 vim.keymap.set("n", "<leader>ot", function()
     vim.cmd([[ToggleTerm direction=tab]])

@@ -23,6 +23,9 @@ require("conform").setup({
         javascriptreact = { "biome" },
         typescriptreact = { "biome" },
         nix = { "nixfmt" },
+        bash = { 'shfmt', 'shellcheck' },
+        zsh = { 'shfmt', 'shellcheck' },
+        sh = { 'shfmt', 'shellcheck' },
     },
 })
 
