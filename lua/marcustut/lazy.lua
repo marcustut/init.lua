@@ -307,12 +307,19 @@ require("lazy").setup({
     { "catppuccin/nvim",                  priority = 1000, name = "catppuccin", },
     { "rebelot/kanagawa.nvim",            priority = 1000 },
     { "ellisonleao/gruvbox.nvim",         priority = 1000, config = true },
+    { "sainnhe/gruvbox-material",         priority = 1000 },
     { "zenbones-theme/zenbones.nvim",     priority = 1000, dependencies = { "rktjmp/lush.nvim" }, lazy = false },
     { "nyoom-engineering/oxocarbon.nvim", priority = 1000 },
-    { "xiyaowong/transparent.nvim",       priority = 1000 },
+    {
+        "xiyaowong/transparent.nvim",
+        priority = 1000,
+        keys = {
+            "<leader>ut", ":TransparentToggle<CR>", desc = "Toggle Transparent Background"
+        }
+    },
 
     -- Icons
-    { "nvim-tree/nvim-web-devicons",      lazy = true },
+    { "nvim-tree/nvim-web-devicons", lazy = true },
 
     -- Git
     "tpope/vim-fugitive",
