@@ -287,13 +287,109 @@ require("lazy").setup({
 
     -- Copilot
     {
+        "folke/sidekick.nvim",
+        opts = {
+            cli = {
+                mux = {
+                    backend = "tmux",
+                    enabled = true,
+                },
+            },
+            picker = {
+                actions = {
+                    sidekick_send = function(...)
+                        return require("sidekick.cli.picker.snacks").send(...)
+                    end,
+                },
+                win = {
+                    input = {
+                        keys = {
+                            ["<a-a>"] = {
+                                "sidekick_send",
+                                mode = { "n", "i" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        keys = {
+            {
+                "<tab>",
+                function()
+                    -- if there is a next edit, jump to it, otherwise apply it if any
+                    if not require("sidekick").nes_jump_or_apply() then
+                        return "<Tab>" -- fallback to normal tab
+                    end
+                end,
+                expr = true,
+                desc = "Goto/Apply Next Edit Suggestion",
+            },
+            {
+                "<c-.>",
+                function() require("sidekick.cli").toggle() end,
+                desc = "Sidekick Toggle",
+                mode = { "n", "t", "i", "x" },
+            },
+            {
+                "<leader>aa",
+                function() require("sidekick.cli").toggle() end,
+                desc = "Sidekick Toggle CLI",
+            },
+            {
+                "<leader>as",
+                function() require("sidekick.cli").select() end,
+                -- Or to select only installed tools:
+                -- require("sidekick.cli").select({ filter = { installed = true } })
+                desc = "Select CLI",
+            },
+            {
+                "<leader>ad",
+                function() require("sidekick.cli").close() end,
+                desc = "Detach a CLI Session",
+            },
+            {
+                "<leader>at",
+                function() require("sidekick.cli").send({ msg = "{this}" }) end,
+                mode = { "x", "n" },
+                desc = "Send This",
+            },
+            {
+                "<leader>af",
+                function() require("sidekick.cli").send({ msg = "{file}" }) end,
+                desc = "Send File",
+            },
+            {
+                "<leader>av",
+                function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+                mode = { "x" },
+                desc = "Send Visual Selection",
+            },
+            {
+                "<leader>ap",
+                function() require("sidekick.cli").prompt() end,
+                mode = { "n", "x" },
+                desc = "Sidekick Select Prompt",
+            },
+        },
+    },
+    {
         "zbirenbaum/copilot.lua",
+        requires = { "copilotlsp-nvim/copilot-lsp" },
         cmd = "Copilot",
         event = "InsertEnter",
-        opts = {
-            suggestion = { enabled = true },
-            panel = { enabled = true },
-        },
+        config = function()
+            require("copilot").setup({
+                panel = { enabled = false },
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = true,
+                },
+            })
+        end,
+        keys = {
+            { "<C-l>", function() require("copilot.suggestion").accept() end, mode = { "i" }, desc = "Accept Copilot Suggestion" },
+        }
     },
 
     -- Terminal
@@ -314,7 +410,7 @@ require("lazy").setup({
         "xiyaowong/transparent.nvim",
         priority = 1000,
         keys = {
-            "<leader>ut", ":TransparentToggle<CR>", desc = "Toggle Transparent Background"
+            { "<leader>ut", ":TransparentToggle<CR>", desc = "Toggle Transparent Background" }
         }
     },
 
@@ -371,6 +467,7 @@ require("lazy").setup({
                     "typescript",
                     "yaml",
                     "vimdoc",
+                    "nu",
                 },
             })
         end,
@@ -448,34 +545,8 @@ require("lazy").setup({
         event = "VimEnter",
         version = "1.*",
         dependencies = {
-            -- Snippet Engine
-            {
-                "L3MON4D3/LuaSnip",
-                version = "2.*",
-                build = (function()
-                    -- Build Step is needed for regex support in snippets.
-                    -- This step is not supported in many windows environments.
-                    -- Remove the below condition to re-enable on windows.
-                    if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-                        return
-                    end
-                    return "make install_jsregexp"
-                end)(),
-                dependencies = {
-                    -- `friendly-snippets` contains a variety of premade snippets.
-                    --    See the README about individual language/framework/plugin snippets:
-                    --    https://github.com/rafamadriz/friendly-snippets
-                    -- {
-                    --   'rafamadriz/friendly-snippets',
-                    --   config = function()
-                    --     require('luasnip.loaders.from_vscode').lazy_load()
-                    --   end,
-                    -- },
-                },
-                opts = {},
-            },
-            { "fang2hou/blink-copilot" },
             "folke/lazydev.nvim",
+            "giuxtaposition/blink-cmp-copilot",
         },
         --- @module 'blink.cmp'
         --- @type blink.cmp.Config
@@ -487,7 +558,15 @@ require("lazy").setup({
                 ["<C-e>"] = { "hide", "fallback" },
                 ["<CR>"] = { "accept", "fallback" },
 
-                ["<Tab>"] = { "snippet_forward", "fallback" },
+                ["<Tab>"] = {
+                    "snippet_forward",
+                    function() -- sidekick next edit suggestion
+                        if require("sidekick").next_jump_or_apply then
+                            return require("sidekick").next_jump_or_apply()
+                        end
+                    end,
+                    "fallback",
+                },
                 ["<S-Tab>"] = { "snippet_backward", "fallback" },
 
                 ["<Up>"] = { "select_prev", "fallback" },
@@ -512,11 +591,10 @@ require("lazy").setup({
             },
 
             sources = {
-                -- default = { "lsp", "path", "snippets", "lazydev", "copilot" },
-                default = { "lsp", "path", "snippets", "lazydev" },
+                default = { "lsp", "path", "snippets", "lazydev", "copilot" },
                 providers = {
                     lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
-                    -- copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true },
+                    copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100, async = true },
                 },
             },
 
