@@ -36,7 +36,7 @@ require("lazy").setup({
             picker = { enabled = true },
             quickfile = { enabled = true },
             scope = { enabled = true },
-            scroll = { enabled = true },
+            scroll = { enabled = false },
             statuscolumn = { enabled = true },
             words = { enabled = true },
             styles = {
@@ -286,111 +286,111 @@ require("lazy").setup({
     },
 
     -- Copilot
-    {
-        "folke/sidekick.nvim",
-        opts = {
-            cli = {
-                mux = {
-                    backend = "tmux",
-                    enabled = true,
-                },
-            },
-            picker = {
-                actions = {
-                    sidekick_send = function(...)
-                        return require("sidekick.cli.picker.snacks").send(...)
-                    end,
-                },
-                win = {
-                    input = {
-                        keys = {
-                            ["<a-a>"] = {
-                                "sidekick_send",
-                                mode = { "n", "i" },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        keys = {
-            {
-                "<tab>",
-                function()
-                    -- if there is a next edit, jump to it, otherwise apply it if any
-                    if not require("sidekick").nes_jump_or_apply() then
-                        return "<Tab>" -- fallback to normal tab
-                    end
-                end,
-                expr = true,
-                desc = "Goto/Apply Next Edit Suggestion",
-            },
-            {
-                "<c-.>",
-                function() require("sidekick.cli").toggle() end,
-                desc = "Sidekick Toggle",
-                mode = { "n", "t", "i", "x" },
-            },
-            {
-                "<leader>aa",
-                function() require("sidekick.cli").toggle() end,
-                desc = "Sidekick Toggle CLI",
-            },
-            {
-                "<leader>as",
-                function() require("sidekick.cli").select() end,
-                -- Or to select only installed tools:
-                -- require("sidekick.cli").select({ filter = { installed = true } })
-                desc = "Select CLI",
-            },
-            {
-                "<leader>ad",
-                function() require("sidekick.cli").close() end,
-                desc = "Detach a CLI Session",
-            },
-            {
-                "<leader>at",
-                function() require("sidekick.cli").send({ msg = "{this}" }) end,
-                mode = { "x", "n" },
-                desc = "Send This",
-            },
-            {
-                "<leader>af",
-                function() require("sidekick.cli").send({ msg = "{file}" }) end,
-                desc = "Send File",
-            },
-            {
-                "<leader>av",
-                function() require("sidekick.cli").send({ msg = "{selection}" }) end,
-                mode = { "x" },
-                desc = "Send Visual Selection",
-            },
-            {
-                "<leader>ap",
-                function() require("sidekick.cli").prompt() end,
-                mode = { "n", "x" },
-                desc = "Sidekick Select Prompt",
-            },
-        },
-    },
-    {
-        "zbirenbaum/copilot.lua",
-        requires = { "copilotlsp-nvim/copilot-lsp" },
-        cmd = "Copilot",
-        event = "InsertEnter",
-        config = function()
-            require("copilot").setup({
-                panel = { enabled = false },
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = true,
-                },
-            })
-        end,
-        keys = {
-            { "<C-l>", function() require("copilot.suggestion").accept() end, mode = { "i" }, desc = "Accept Copilot Suggestion" },
-        }
-    },
+    -- {
+    --     "folke/sidekick.nvim",
+    --     opts = {
+    --         cli = {
+    --             mux = {
+    --                 backend = "tmux",
+    --                 enabled = true,
+    --             },
+    --         },
+    --         picker = {
+    --             actions = {
+    --                 sidekick_send = function(...)
+    --                     return require("sidekick.cli.picker.snacks").send(...)
+    --                 end,
+    --             },
+    --             win = {
+    --                 input = {
+    --                     keys = {
+    --                         ["<a-a>"] = {
+    --                             "sidekick_send",
+    --                             mode = { "n", "i" },
+    --                         },
+    --                     },
+    --                 },
+    --             },
+    --         },
+    --     },
+    --     keys = {
+    --         {
+    --             "<tab>",
+    --             function()
+    --                 -- if there is a next edit, jump to it, otherwise apply it if any
+    --                 if not require("sidekick").nes_jump_or_apply() then
+    --                     return "<Tab>" -- fallback to normal tab
+    --                 end
+    --             end,
+    --             expr = true,
+    --             desc = "Goto/Apply Next Edit Suggestion",
+    --         },
+    --         {
+    --             "<c-.>",
+    --             function() require("sidekick.cli").toggle() end,
+    --             desc = "Sidekick Toggle",
+    --             mode = { "n", "t", "i", "x" },
+    --         },
+    --         {
+    --             "<leader>aa",
+    --             function() require("sidekick.cli").toggle() end,
+    --             desc = "Sidekick Toggle CLI",
+    --         },
+    --         {
+    --             "<leader>as",
+    --             function() require("sidekick.cli").select() end,
+    --             -- Or to select only installed tools:
+    --             -- require("sidekick.cli").select({ filter = { installed = true } })
+    --             desc = "Select CLI",
+    --         },
+    --         {
+    --             "<leader>ad",
+    --             function() require("sidekick.cli").close() end,
+    --             desc = "Detach a CLI Session",
+    --         },
+    --         {
+    --             "<leader>at",
+    --             function() require("sidekick.cli").send({ msg = "{this}" }) end,
+    --             mode = { "x", "n" },
+    --             desc = "Send This",
+    --         },
+    --         {
+    --             "<leader>af",
+    --             function() require("sidekick.cli").send({ msg = "{file}" }) end,
+    --             desc = "Send File",
+    --         },
+    --         {
+    --             "<leader>av",
+    --             function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+    --             mode = { "x" },
+    --             desc = "Send Visual Selection",
+    --         },
+    --         {
+    --             "<leader>ap",
+    --             function() require("sidekick.cli").prompt() end,
+    --             mode = { "n", "x" },
+    --             desc = "Sidekick Select Prompt",
+    --         },
+    --     },
+    -- },
+    -- {
+    --     "zbirenbaum/copilot.lua",
+    --     requires = { "copilotlsp-nvim/copilot-lsp" },
+    --     cmd = "Copilot",
+    --     event = "InsertEnter",
+    --     config = function()
+    --         require("copilot").setup({
+    --             panel = { enabled = false },
+    --             suggestion = {
+    --                 enabled = true,
+    --                 auto_trigger = true,
+    --             },
+    --         })
+    --     end,
+    --     keys = {
+    --         { "<C-l>", function() require("copilot.suggestion").accept() end, mode = { "i" }, desc = "Accept Copilot Suggestion" },
+    --     }
+    -- },
 
     -- Terminal
     {
@@ -472,9 +472,92 @@ require("lazy").setup({
             })
         end,
     },
+    {
+        "davidmh/mdx.nvim",
+        dependencies = { "nvim-treesitter/nvim-treesitter" }
+    },
 
-    -- Repl
-    { 'Vigemus/iron.nvim' },
+    -- Jupyter Notebooks
+    {
+        "benlubas/molten-nvim",
+        version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+        build = ":UpdateRemotePlugins",
+        dependencies = { "3rd/image.nvim" },
+        init = function()
+            vim.g.python3_host_prog = "/Users/marcus/nb-playground/.venv/bin/python"
+            vim.g.molten_image_provider = "image.nvim"
+            vim.g.molten_output_win_max_height = 50
+            vim.g.molten_use_border_highlights = false
+            vim.g.molten_auto_open_output = false
+            vim.g.molten_wrap_output = true
+            vim.g.molten_virt_text_output = true
+            vim.g.molten_virt_lines_off_by_1 = true
+        end,
+        keys = {
+            { "<localleader>oe", ":noautocmd MoltenEnterOutput<CR>", desc = "Enter Output Window",           mode = "n" },
+            { "<localleader>oh", ":MoltenHideOutput<CR>",            desc = "Hide Output Window",            mode = "n" },
+            { "<localleader>md", ":MoltenDelete<CR>",                desc = "Delete Cell",                   mode = "n" },
+            { "<localleader>mi", ":MoltenInit<CR>",                  desc = "Initialize Molten for python3", mode = "n" },
+        },
+    },
+    {
+        "3rd/image.nvim",
+        build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
+        opts = { processor = "magick_cli" }
+    },
+    {
+        'GCBallesteros/jupytext.nvim',
+        lazy = false,
+        config = function()
+            require('jupytext').setup({
+                style = 'markdown',
+                output_extension = 'md',
+                force_ft = 'markdown',
+            })
+        end,
+    },
+    {
+        "quarto-dev/quarto-nvim",
+        dependencies = {
+            "jmbuhr/otter.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require("quarto").setup({
+                lspFeatures = {
+                    languages = { "python", "rust" },
+                    chunks = "all",
+                    diagnostics = {
+                        enabled = true,
+                        triggers = { "BufWritePost" },
+                    },
+                    completion = {
+                        enabled = true,
+                    },
+                },
+                keymap = {
+                    hover = "K",
+                    definition = "gd",
+                    rename = "<leader>lr",
+                    references = "gr",
+                    format = "<leader>lf",
+                },
+                codeRunner = {
+                    enabled = true,
+                    default_method = "molten",
+                },
+            })
+            local runner = require("quarto.runner")
+            vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
+            vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
+            vim.keymap.set("n", "<localleader>rA", runner.run_all, { desc = "run all cells", silent = true })
+            vim.keymap.set("n", "<localleader>rl", runner.run_line, { desc = "run line", silent = true })
+            vim.keymap.set("v", "<localleader>r", runner.run_range, { desc = "run visual range", silent = true })
+            vim.keymap.set("n", "<localleader>RA", function()
+                runner.run_all(true)
+            end, { desc = "run all cells of all languages", silent = true })
+        end,
+    },
 
     -- Language Server Protocol (LSP)
     {
@@ -546,7 +629,7 @@ require("lazy").setup({
         version = "1.*",
         dependencies = {
             "folke/lazydev.nvim",
-            "giuxtaposition/blink-cmp-copilot",
+            -- "giuxtaposition/blink-cmp-copilot",
         },
         --- @module 'blink.cmp'
         --- @type blink.cmp.Config
@@ -560,11 +643,11 @@ require("lazy").setup({
 
                 ["<Tab>"] = {
                     "snippet_forward",
-                    function() -- sidekick next edit suggestion
-                        if require("sidekick").next_jump_or_apply then
-                            return require("sidekick").next_jump_or_apply()
-                        end
-                    end,
+                    -- function() -- sidekick next edit suggestion
+                    --     if require("sidekick").next_jump_or_apply then
+                    --         return require("sidekick").next_jump_or_apply()
+                    --     end
+                    -- end,
                     "fallback",
                 },
                 ["<S-Tab>"] = { "snippet_backward", "fallback" },
@@ -591,10 +674,11 @@ require("lazy").setup({
             },
 
             sources = {
-                default = { "lsp", "path", "snippets", "lazydev", "copilot" },
+                -- default = { "lsp", "path", "snippets", "lazydev", "copilot" },
+                default = { "lsp", "path", "snippets", "lazydev" },
                 providers = {
                     lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
-                    copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100, async = true },
+                    -- copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100, async = true },
                 },
             },
 
@@ -643,11 +727,11 @@ require("lazy").setup({
             vim.fn["mkdp#util#install"]()
         end,
     },
-    {
-        "MeanderingProgrammer/render-markdown.nvim",
-        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-        opts = {},
-    },
+    -- {
+    --     "MeanderingProgrammer/render-markdown.nvim",
+    --     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    --     opts = {},
+    -- },
 
     -- Help
     {

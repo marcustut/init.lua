@@ -19,3 +19,8 @@ end)
 vim.keymap.set("n", "<C-->", function()
     change_scale_factor(1 / 1.25)
 end)
+
+-- Clipboard
+vim.api.nvim_set_keymap("v", "<D-c>", '"+y', { noremap = true })      -- Select line(s) in visual mode and copy (CTRL+Shift+V)
+vim.api.nvim_set_keymap("i", "<D-v>", '<ESC>"+p', { noremap = true }) -- Paste in insert mode (CTRL+Shift+C)
+vim.api.nvim_set_keymap("n", "<D-v>", '"+p', { noremap = true })      -- Paste in normal mode (CTRL+Shift+C)

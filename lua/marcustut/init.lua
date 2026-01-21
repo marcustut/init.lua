@@ -1,8 +1,11 @@
 require("marcustut.set")
-require("marcustut.neovide")
 require("marcustut.number")
 require("marcustut.remap")
 require("marcustut.lazy")
+
+if vim.g.neovide then
+    require("marcustut.neovide")
+end
 
 vim.o.background = "dark"
 vim.cmd([[colorscheme gruvbox-material]])
