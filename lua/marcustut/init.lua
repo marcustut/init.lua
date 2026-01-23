@@ -6,6 +6,3 @@ require("marcustut.lazy")
 if vim.g.neovide then
     require("marcustut.neovide")
 end
-
-vim.o.background = "dark"
-vim.cmd([[colorscheme gruvbox-material]])
