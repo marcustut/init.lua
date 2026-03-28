@@ -286,93 +286,93 @@ require("lazy").setup({
     },
 
     -- Copilot
-    -- {
-    --     "folke/sidekick.nvim",
-    --     opts = {
-    --         cli = {
-    --             mux = {
-    --                 backend = "tmux",
-    --                 enabled = true,
-    --             },
-    --         },
-    --         picker = {
-    --             actions = {
-    --                 sidekick_send = function(...)
-    --                     return require("sidekick.cli.picker.snacks").send(...)
-    --                 end,
-    --             },
-    --             win = {
-    --                 input = {
-    --                     keys = {
-    --                         ["<a-a>"] = {
-    --                             "sidekick_send",
-    --                             mode = { "n", "i" },
-    --                         },
-    --                     },
-    --                 },
-    --             },
-    --         },
-    --     },
-    --     keys = {
-    --         {
-    --             "<tab>",
-    --             function()
-    --                 -- if there is a next edit, jump to it, otherwise apply it if any
-    --                 if not require("sidekick").nes_jump_or_apply() then
-    --                     return "<Tab>" -- fallback to normal tab
-    --                 end
-    --             end,
-    --             expr = true,
-    --             desc = "Goto/Apply Next Edit Suggestion",
-    --         },
-    --         {
-    --             "<c-.>",
-    --             function() require("sidekick.cli").toggle() end,
-    --             desc = "Sidekick Toggle",
-    --             mode = { "n", "t", "i", "x" },
-    --         },
-    --         {
-    --             "<leader>aa",
-    --             function() require("sidekick.cli").toggle() end,
-    --             desc = "Sidekick Toggle CLI",
-    --         },
-    --         {
-    --             "<leader>as",
-    --             function() require("sidekick.cli").select() end,
-    --             -- Or to select only installed tools:
-    --             -- require("sidekick.cli").select({ filter = { installed = true } })
-    --             desc = "Select CLI",
-    --         },
-    --         {
-    --             "<leader>ad",
-    --             function() require("sidekick.cli").close() end,
-    --             desc = "Detach a CLI Session",
-    --         },
-    --         {
-    --             "<leader>at",
-    --             function() require("sidekick.cli").send({ msg = "{this}" }) end,
-    --             mode = { "x", "n" },
-    --             desc = "Send This",
-    --         },
-    --         {
-    --             "<leader>af",
-    --             function() require("sidekick.cli").send({ msg = "{file}" }) end,
-    --             desc = "Send File",
-    --         },
-    --         {
-    --             "<leader>av",
-    --             function() require("sidekick.cli").send({ msg = "{selection}" }) end,
-    --             mode = { "x" },
-    --             desc = "Send Visual Selection",
-    --         },
-    --         {
-    --             "<leader>ap",
-    --             function() require("sidekick.cli").prompt() end,
-    --             mode = { "n", "x" },
-    --             desc = "Sidekick Select Prompt",
-    --         },
-    --     },
-    -- },
+    {
+        "folke/sidekick.nvim",
+        opts = {
+            cli = {
+                mux = {
+                    backend = "tmux",
+                    enabled = true,
+                },
+            },
+            picker = {
+                actions = {
+                    sidekick_send = function(...)
+                        return require("sidekick.cli.picker.snacks").send(...)
+                    end,
+                },
+                win = {
+                    input = {
+                        keys = {
+                            ["<a-a>"] = {
+                                "sidekick_send",
+                                mode = { "n", "i" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        keys = {
+            {
+                "<tab>",
+                function()
+                    -- if there is a next edit, jump to it, otherwise apply it if any
+                    if not require("sidekick").nes_jump_or_apply() then
+                        return "<Tab>" -- fallback to normal tab
+                    end
+                end,
+                expr = true,
+                desc = "Goto/Apply Next Edit Suggestion",
+            },
+            {
+                "<c-.>",
+                function() require("sidekick.cli").toggle() end,
+                desc = "Sidekick Toggle",
+                mode = { "n", "t", "i", "x" },
+            },
+            {
+                "<leader>aa",
+                function() require("sidekick.cli").toggle() end,
+                desc = "Sidekick Toggle CLI",
+            },
+            {
+                "<leader>as",
+                function() require("sidekick.cli").select() end,
+                -- Or to select only installed tools:
+                -- require("sidekick.cli").select({ filter = { installed = true } })
+                desc = "Select CLI",
+            },
+            {
+                "<leader>ad",
+                function() require("sidekick.cli").close() end,
+                desc = "Detach a CLI Session",
+            },
+            {
+                "<leader>at",
+                function() require("sidekick.cli").send({ msg = "{this}" }) end,
+                mode = { "x", "n" },
+                desc = "Send This",
+            },
+            {
+                "<leader>af",
+                function() require("sidekick.cli").send({ msg = "{file}" }) end,
+                desc = "Send File",
+            },
+            {
+                "<leader>av",
+                function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+                mode = { "x" },
+                desc = "Send Visual Selection",
+            },
+            {
+                "<leader>ap",
+                function() require("sidekick.cli").prompt() end,
+                mode = { "n", "x" },
+                desc = "Sidekick Select Prompt",
+            },
+        },
+    },
     -- {
     --     "zbirenbaum/copilot.lua",
     --     requires = { "copilotlsp-nvim/copilot-lsp" },
@@ -418,11 +418,13 @@ require("lazy").setup({
         opts = {
             set_dark_mode = function()
                 vim.api.nvim_set_option_value("background", "dark", {});
-                vim.cmd([[colorscheme catppuccin-mocha]])
+                vim.cmd([[colorscheme gruvbox]])
+                vim.cmd([[set background=dark]])
             end,
             set_light_mode = function()
                 vim.api.nvim_set_option_value("background", "light", {});
-                vim.cmd([[colorscheme catppuccin-latte]])
+                vim.cmd([[colorscheme gruvbox]])
+                vim.cmd([[set background=light]])
             end,
         }
     },
@@ -711,6 +713,24 @@ require("lazy").setup({
         },
     },
 
+    -- Org Mode
+    {
+        'nvim-orgmode/orgmode',
+        event = 'VeryLazy',
+        ft = { 'org' },
+        config = function()
+            -- Setup orgmode
+            ---@diagnostic disable-next-line: missing-fields
+            require('orgmode').setup({
+                org_agenda_files = '~/marcustut/notes/goal/**/*',
+                org_startup_folded = "content",
+                org_startup_indented = true,
+            })
+
+            -- Experimental LSP support
+            vim.lsp.enable('org')
+        end,
+    },
     -- Snippets
     { "L3MON4D3/LuaSnip" },
     { "rafamadriz/friendly-snippets" },
@@ -733,18 +753,23 @@ require("lazy").setup({
 
     -- Markdown
     {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        build = function()
-            vim.fn["mkdp#util#install"]()
+        "selimacerbas/markdown-preview.nvim",
+        dependencies = { "selimacerbas/live-server.nvim" },
+        config = function()
+            require("markdown_preview").setup({
+                -- all optional; sane defaults shown
+                instance_mode = "takeover", -- "takeover" (one tab) or "multi" (tab per instance)
+                port = 0,                   -- 0 = auto (8421 for takeover, OS-assigned for multi)
+                open_browser = true,
+                debounce_ms = 300,
+            })
         end,
     },
-    -- {
-    --     "MeanderingProgrammer/render-markdown.nvim",
-    --     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    --     opts = {},
-    -- },
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+        opts = {},
+    },
 
     -- Help
     {
